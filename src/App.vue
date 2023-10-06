@@ -16,6 +16,8 @@ function test() {
         <ul>
           <li @click="test()"><router-link to="/main"> Main </router-link></li>
           <li><router-link to="/test"> Test </router-link></li>
+          <li><router-link to="/post-list"> PostList </router-link></li>
+          
           <!--          <li v-for="(board, idx) in boards" :key="idx" @click="getBoards">-->
           <!--            <span v-if="board.postCount > 0">-->
           <!--               <router-link :to="{name:'PostList', params:{id:board.id}, query:{boardName:board.name, disclosureType: board.disclosureType}}"> {{ board.name }} </router-link>-->
