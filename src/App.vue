@@ -1,11 +1,21 @@
 <script setup>
+import { onMounted, ref } from "vue";
 import {useRoute} from "vue-router";
-const route = useRoute();
+import axios from "axios";
 
-function test() {
-  console.log("test");
+const route = useRoute();
+const boards = ref([]);
+
+async function getBoards() {
+  try {
+    const {data} = await axios.get("/api/board");
+    boards.value = data;
+  } catch (error) {
+    console.log(error);
+  }
 }
 
+onMounted(getBoards());
 </script>
 
 <template>
@@ -14,9 +24,10 @@ function test() {
       <div class="menu-wrapper">
         <!--        <div><button type="button" @click="openModal">게시판 등록</button></div>-->
         <ul>
-          <li @click="test()"><router-link to="/main"> Main </router-link></li>
-          <li><router-link to="/test"> Test </router-link></li>
-          <li><router-link to="/post-list"> PostList </router-link></li>
+          <li><router-link to="/main"> Main </router-link></li>
+          <li v-for="board in boards" :key="board.id">
+            <span>{{ board.name }}</span>
+          </li>
           
           <!--          <li v-for="(board, idx) in boards" :key="idx" @click="getBoards">-->
           <!--            <span v-if="board.postCount > 0">-->
