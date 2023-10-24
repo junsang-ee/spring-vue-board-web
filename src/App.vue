@@ -1,9 +1,9 @@
 <script setup>
 import { onMounted, ref } from "vue";
-import {useRoute} from "vue-router";
+import {useRouter} from "vue-router";
 import axios from "axios";
 
-const route = useRoute();
+const router = useRouter();
 const boards = ref([]);
 
 async function getBoards() {
@@ -13,6 +13,14 @@ async function getBoards() {
   } catch (error) {
     console.log(error);
   }
+}
+
+function goBoard(boardId) {
+  router.push({ name: "PostList", params:{boardId:boardId}})
+}
+
+function goEmptyBoard() {
+  router.push({ name: "PostEmpty" })
 }
 
 onMounted(getBoards());
@@ -25,19 +33,15 @@ onMounted(getBoards());
         <!--        <div><button type="button" @click="openModal">게시판 등록</button></div>-->
         <ul>
           <li><router-link to="/main"> Main </router-link></li>
+          <li><router-link to="/login"> Login </router-link></li>
           <li v-for="board in boards" :key="board.id">
-            <span>{{ board.name }}</span>
+            <span v-if="board.postCount === 0">
+              <button @click="goEmptyBoard">{{ board.name }}</button>
+            </span>
+            <span v-else>
+              <button @click="goBoard(board.boardId)">{{ board.name }}</button>
+            </span>
           </li>
-          
-          <!--          <li v-for="(board, idx) in boards" :key="idx" @click="getBoards">-->
-          <!--            <span v-if="board.postCount > 0">-->
-          <!--               <router-link :to="{name:'PostList', params:{id:board.id}, query:{boardName:board.name, disclosureType: board.disclosureType}}"> {{ board.name }} </router-link>-->
-          <!--            </span>-->
-          <!--            <span v-else>-->
-          <!--              <router-link :to="{name:'EmptyPost', query:{boardId:board.id}}"> {{ board.name }} </router-link>-->
-          <!--            </span>-->
-          <!--            <span class="delete-button"><button type="button" @click="deleteBoard(board.id, board.name)">삭제</button></span>-->
-          <!--          </li>-->
         </ul>
       </div>
           <div class="router">
